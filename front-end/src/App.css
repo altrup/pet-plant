@@ -1,0 +1,57 @@
+.App {
+  text-align: center;
+  background-color: var(--color-background);
+  overflow: auto;
+  height: 100%;
+}
+
+.App-header {
+  background-color: var(--color-header-background);
+  padding: 20px;
+  color: var(--color-text);
+}
+
+main {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-background);
+}
+
+.card {
+  background-color: var(--color-card-background);
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  width: 80%;
+  max-width: 800px;
+}
+
+input[type="range"] {
+  width: 300px;
+}
+
+.config-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.config-container span {
+  min-width: 40px;
+  text-align: left;
+}
+
+.message {
+  margin-top: 1em;
+}
+
+.moisture-config-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  height: 100%;
+}
