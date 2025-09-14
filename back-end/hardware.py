@@ -2,9 +2,11 @@ import config
 from lib.CFAH1602A import CFAH1602A
 
 # Global hardware objects
+global cfah1602a
 cfah1602a = None
 
 def initialize_hardware():
+	global cfah1602a
 	cfah1602a = CFAH1602A(
 		config.RS_PIN,
 		config.RW_PIN,
@@ -18,7 +20,6 @@ def initialize_hardware():
 		config.DB6_PIN,
 		config.DB7_PIN
 	)
-	pass
 
 def get_moisture_percentage():
 	pass

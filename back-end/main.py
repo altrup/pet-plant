@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api import router as api_router
-from hardware import initialize_hardware
+import hardware
 
 app = FastAPI()
 
@@ -14,7 +14,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-initialize_hardware()
+hardware.initialize_hardware()
 
 # Include the API router
 app.include_router(api_router)
