@@ -1,7 +1,7 @@
 # Logic for communicating with LCD (CFAH1602A)
 from dataclasses import dataclass
 from time import sleep
-from RPi.GPIO import GPIO
+import RPi.GPIO as GPIO
 
 class CFAH1602ADriver:
 	RS_PIN: int
