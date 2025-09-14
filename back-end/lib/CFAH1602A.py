@@ -4,16 +4,18 @@ from time import sleep
 from drivers.CFAH1602ADriver import CFAH1602ADriver
 
 class CFAH1602A:
+	driver: CFAH1602ADriver
+
 	def __init__(self, rs_pin: int, rw_pin: int, e_pin: int, db0_pin: int, db1_pin: int, db2_pin: int, db3_pin: int, db4_pin: int, db5_pin: int, db6_pin: int, db7_pin: int):
 		self.driver = CFAH1602ADriver(rs_pin, rw_pin, e_pin, db0_pin, db1_pin, db2_pin, db3_pin, db4_pin, db5_pin, db6_pin, db7_pin)
 
 	def initialize(self):
-		self.function_set(data_length_8bit=True, two_line=True, font_5x11=False)
+		self.driver.function_set(data_length_8bit=True, two_line=True, font_5x11=False)
 		sleep(0.005) # Wait for more than 4.1ms
-		self.function_set(data_length_8bit=True, two_line=True, font_5x11=False)
+		self.driver.function_set(data_length_8bit=True, two_line=True, font_5x11=False)
 		sleep(0.00015) # Wait for more than 100us
-		self.function_set(data_length_8bit=True, two_line=True, font_5x11=False)
+		self.driver.function_set(data_length_8bit=True, two_line=True, font_5x11=False)
 		# Now we can start actually setting data
-		self.function_set(data_length_8bit=True, two_line=True, font_5x11=False)
-		self.display_on_off_control(display_on=False, cursor_on=False, blink_on=False)
-		self.clear_display()
+		self.driver.function_set(data_length_8bit=True, two_line=True, font_5x11=False)
+		self.driver.display_on_off_control(display_on=False, cursor_on=False, blink_on=False)
+		self.driver.clear_display()
