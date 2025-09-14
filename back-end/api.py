@@ -37,10 +37,10 @@ def get_moisture_levels():
 
             # Control the LED
             if percentage < target_moisture_level:
-                hardware.control_led(True)  # Turn LED ON (soil is too dry)
+                hardware.set_led_state(True)  # Turn LED ON (soil is too dry)
                 print("LED ON - Soil is dry")
             else:
-                hardware.control_led(False)  # Turn LED OFF (soil is moist enough)
+                hardware.set_led_state(False)  # Turn LED OFF (soil is moist enough)
 
             return [{"name": "Now", "level": round(percentage)}]
         except Exception as e:

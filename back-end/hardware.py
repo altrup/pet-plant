@@ -7,3 +7,9 @@ led = None
 def initialize_hardware():
 	print(config)
 	pass
+
+def get_moisture_percentage():
+	pass
+
+def set_led_state(state: bool):
+	pass
