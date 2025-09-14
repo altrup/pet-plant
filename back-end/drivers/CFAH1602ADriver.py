@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from time import sleep
 from RPi.GPIO import GPIO
 
-class CFAH1602A:
+class CFAH1602ADriver:
 	RS_PIN: int
 	RW_PIN: int
 	E_PIN: int
@@ -178,6 +178,20 @@ class CFAH1602A:
 			DB0_PIN_VALUE=int(shift)
 		))
 	
+	def display_on_off_control(self, display_on: bool, cursor_on: bool, blink_on: bool):
+		self.send_command(self.WriteCommand(
+			RS_PIN_VALUE=0,
+			RW_PIN_VALUE=0,
+			DB7_PIN_VALUE=0,
+			DB6_PIN_VALUE=0,
+			DB5_PIN_VALUE=0,
+			DB4_PIN_VALUE=1,
+			DB3_PIN_VALUE=1,
+			DB2_PIN_VALUE=int(display_on),
+			DB1_PIN_VALUE=int(cursor_on),
+			DB0_PIN_VALUE=int(blink_on)
+		))
+	
 	def cursor_or_display_shift(self, shift_display: bool, shift_right: bool):
 		self.send_command(self.WriteCommand(
 			RS_PIN_VALUE=0,
@@ -192,7 +206,7 @@ class CFAH1602A:
 			DB0_PIN_VALUE=0
 		))
 	
-	def function_set(self, data_length_8bit: bool, two_line: bool, font_5x10: bool):
+	def function_set(self, data_length_8bit: bool, two_line: bool, font_5x11: bool):
 		self.send_command(self.WriteCommand(
 			RS_PIN_VALUE=0,
 			RW_PIN_VALUE=0,
@@ -201,7 +215,7 @@ class CFAH1602A:
 			DB5_PIN_VALUE=1,
 			DB4_PIN_VALUE=int(data_length_8bit),
 			DB3_PIN_VALUE=int(two_line),
-			DB2_PIN_VALUE=int(font_5x10),
+			DB2_PIN_VALUE=int(font_5x11),
 			DB1_PIN_VALUE=0,
 			DB0_PIN_VALUE=0
 		))

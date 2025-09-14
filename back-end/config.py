@@ -1,7 +1,19 @@
 # --- CONFIGURATION ---
 # Edit these values to match your hardware setup
 import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
+
+RS_PIN = 26
+RW_PIN = 27
+E_PIN = 19
+DB0_PIN = 21
+DB1_PIN = 20
+DB2_PIN = 16
+DB3_PIN = 12
+DB4_PIN = 13
+DB5_PIN = 6
+DB6_PIN = 5
+DB7_PIN = 11
 
 # Set to True to use the real sensor, False to use mock data
 USE_REAL_SENSOR = False

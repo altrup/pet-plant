@@ -14,10 +14,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.on_event("startup")
-def startup_event():
-    # Initialize hardware on startup
-    initialize_hardware()
+initialize_hardware()
 
 # Include the API router
 app.include_router(api_router)
