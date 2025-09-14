@@ -89,19 +89,9 @@ class CFAH1602ADriver:
 
 		sleep(0.002) # Longest execution time is 1.53ms
 
-		E_PIN_DEVICE.off()
-
-		RS_PIN_DEVICE.close()
-		RW_PIN_DEVICE.close()
-		E_PIN_DEVICE.close()
-		DB0_PIN_DEVICE.close()
-		DB1_PIN_DEVICE.close()
-		DB2_PIN_DEVICE.close()
-		DB3_PIN_DEVICE.close()
-		DB4_PIN_DEVICE.close()
-		DB5_PIN_DEVICE.close()
-		DB6_PIN_DEVICE.close()
-		DB7_PIN_DEVICE.close()
+		for pin in [RS_PIN_DEVICE, RW_PIN_DEVICE, E_PIN_DEVICE, DB0_PIN_DEVICE, DB1_PIN_DEVICE, DB2_PIN_DEVICE, DB3_PIN_DEVICE, DB4_PIN_DEVICE, DB5_PIN_DEVICE, DB6_PIN_DEVICE, DB7_PIN_DEVICE]:
+			pin.value = 0
+			pin.close()
 	
 	def clear_display(self):
 		self.send_command(self.WriteCommand(
@@ -277,17 +267,9 @@ class CFAH1602ADriver:
 			DB0_PIN_VALUE=DB0_PIN_DEVICE.value
 		)
 
-		RS_PIN_DEVICE.close()
-		RW_PIN_DEVICE.close()
-		E_PIN_DEVICE.close()
-		DB0_PIN_DEVICE.close()
-		DB1_PIN_DEVICE.close()
-		DB2_PIN_DEVICE.close()
-		DB3_PIN_DEVICE.close()
-		DB4_PIN_DEVICE.close()
-		DB5_PIN_DEVICE.close()
-		DB6_PIN_DEVICE.close()
-		DB7_PIN_DEVICE.close()
+		for pin in [RS_PIN_DEVICE, RW_PIN_DEVICE, E_PIN_DEVICE, DB0_PIN_DEVICE, DB1_PIN_DEVICE, DB2_PIN_DEVICE, DB3_PIN_DEVICE, DB4_PIN_DEVICE, DB5_PIN_DEVICE, DB6_PIN_DEVICE, DB7_PIN_DEVICE]:
+			pin.value = 0
+			pin.close()
 
 		return response
 
@@ -308,6 +290,8 @@ class CFAH1602ADriver:
 
 		RS_PIN_DEVICE.value = 1
 		RW_PIN_DEVICE.value = 1
+
+		E_PIN_DEVICE.on()
 		
 		sleep(0.002) # Longest execution time is 1.53ms
 
@@ -322,18 +306,8 @@ class CFAH1602ADriver:
 			DB0_PIN_DEVICE.value
 		)
 
-		E_PIN_DEVICE.on()
-
-		RS_PIN_DEVICE.close()
-		RW_PIN_DEVICE.close()
-		E_PIN_DEVICE.close()
-		DB0_PIN_DEVICE.close()
-		DB1_PIN_DEVICE.close()
-		DB2_PIN_DEVICE.close()
-		DB3_PIN_DEVICE.close()
-		DB4_PIN_DEVICE.close()
-		DB5_PIN_DEVICE.close()
-		DB6_PIN_DEVICE.close()
-		DB7_PIN_DEVICE.close()
+		for pin in [RS_PIN_DEVICE, RW_PIN_DEVICE, E_PIN_DEVICE, DB0_PIN_DEVICE, DB1_PIN_DEVICE, DB2_PIN_DEVICE, DB3_PIN_DEVICE, DB4_PIN_DEVICE, DB5_PIN_DEVICE, DB6_PIN_DEVICE, DB7_PIN_DEVICE]:
+			pin.value = 0
+			pin.close()
 
 		return busy_flag, address
