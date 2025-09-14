@@ -1,7 +1,7 @@
 # Logic for communicating with LCD (CFAH1602A)
 from dataclasses import dataclass
 from time import sleep
-import RPi.GPIO as GPIO
+from gpiozero import DigitalInputDevice, DigitalOutputDevice
 
 class CFAH1602ADriver:
 	RS_PIN: int
@@ -28,18 +28,6 @@ class CFAH1602ADriver:
 		self.DB5_PIN = db5_pin
 		self.DB6_PIN = db6_pin
 		self.DB7_PIN = db7_pin
-
-		GPIO.setup(self.RS_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.RW_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.E_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB0_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB1_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB2_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB3_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB4_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB5_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB6_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB7_PIN, GPIO.OUT, initial=GPIO.LOW)
 
 	@dataclass
 	class WriteCommand:
@@ -72,69 +60,48 @@ class CFAH1602ADriver:
 
 	# NOTE: all pins default to output pins
 	def send_command(self, command: WriteCommand):
-		GPIO.output(self.E_PIN, GPIO.LOW)
+		RS_PIN_DEVICE = DigitalOutputDevice(self.RS_PIN)
+		RW_PIN_DEVICE = DigitalOutputDevice(self.RW_PIN)
+		E_PIN_DEVICE = DigitalOutputDevice(self.E_PIN)
+		DB0_PIN_DEVICE = DigitalOutputDevice(self.DB0_PIN)
+		DB1_PIN_DEVICE = DigitalOutputDevice(self.DB1_PIN)
+		DB2_PIN_DEVICE = DigitalOutputDevice(self.DB2_PIN)
+		DB3_PIN_DEVICE = DigitalOutputDevice(self.DB3_PIN)
+		DB4_PIN_DEVICE = DigitalOutputDevice(self.DB4_PIN)
+		DB5_PIN_DEVICE = DigitalOutputDevice(self.DB5_PIN)
+		DB6_PIN_DEVICE = DigitalOutputDevice(self.DB6_PIN)
+		DB7_PIN_DEVICE = DigitalOutputDevice(self.DB7_PIN)
 
-		GPIO.output(self.RS_PIN, command.RS_PIN_VALUE)
-		GPIO.output(self.RW_PIN, command.RW_PIN_VALUE)
-		GPIO.output(self.DB0_PIN, command.DB0_PIN_VALUE)
-		GPIO.output(self.DB1_PIN, command.DB1_PIN_VALUE)
-		GPIO.output(self.DB2_PIN, command.DB2_PIN_VALUE)
-		GPIO.output(self.DB3_PIN, command.DB3_PIN_VALUE)
-		GPIO.output(self.DB4_PIN, command.DB4_PIN_VALUE)
-		GPIO.output(self.DB5_PIN, command.DB5_PIN_VALUE)
-		GPIO.output(self.DB6_PIN, command.DB6_PIN_VALUE)
-		GPIO.output(self.DB7_PIN, command.DB7_PIN_VALUE)
+		E_PIN_DEVICE.off()
 
-		GPIO.output(self.E_PIN, GPIO.HIGH)
-		
-		sleep(0.002) # Longest execution time is 1.53ms
+		RS_PIN_DEVICE.value = command.RS_PIN_VALUE
+		RW_PIN_DEVICE.value = command.RW_PIN_VALUE
+		DB0_PIN_DEVICE.value = command.DB0_PIN_VALUE
+		DB1_PIN_DEVICE.value = command.DB1_PIN_VALUE
+		DB2_PIN_DEVICE.value = command.DB2_PIN_VALUE
+		DB3_PIN_DEVICE.value = command.DB3_PIN_VALUE
+		DB4_PIN_DEVICE.value = command.DB4_PIN_VALUE
+		DB5_PIN_DEVICE.value = command.DB5_PIN_VALUE
+		DB6_PIN_DEVICE.value = command.DB6_PIN_VALUE
+		DB7_PIN_DEVICE.value = command.DB7_PIN_VALUE
 
-		GPIO.output(self.E_PIN, GPIO.LOW)
-	
-	def read_data(self, command: ReadCommand):
-		# Set data pins to input
-		GPIO.setup(self.DB0_PIN, GPIO.IN)
-		GPIO.setup(self.DB1_PIN, GPIO.IN)
-		GPIO.setup(self.DB2_PIN, GPIO.IN)
-		GPIO.setup(self.DB3_PIN, GPIO.IN)
-		GPIO.setup(self.DB4_PIN, GPIO.IN)
-		GPIO.setup(self.DB5_PIN, GPIO.IN)
-		GPIO.setup(self.DB6_PIN, GPIO.IN)
-		GPIO.setup(self.DB7_PIN, GPIO.IN)
-
-		GPIO.output(self.E_PIN, GPIO.LOW)
-
-		GPIO.output(self.RS_PIN, command.RS_PIN_VALUE)
-		GPIO.output(self.RW_PIN, command.RW_PIN_VALUE)
-
-		GPIO.output(self.E_PIN, GPIO.HIGH)
+		E_PIN_DEVICE.on()
 
 		sleep(0.002) # Longest execution time is 1.53ms
 
-		response = self.ReadCommandResponse(
-			DB7_PIN_VALUE=GPIO.input(self.DB7_PIN),
-			DB6_PIN_VALUE=GPIO.input(self.DB6_PIN),
-			DB5_PIN_VALUE=GPIO.input(self.DB5_PIN),
-			DB4_PIN_VALUE=GPIO.input(self.DB4_PIN),
-			DB3_PIN_VALUE=GPIO.input(self.DB3_PIN),
-			DB2_PIN_VALUE=GPIO.input(self.DB2_PIN),
-			DB1_PIN_VALUE=GPIO.input(self.DB1_PIN),
-			DB0_PIN_VALUE=GPIO.input(self.DB0_PIN)
-		)
+		E_PIN_DEVICE.off()
 
-		GPIO.output(self.E_PIN, GPIO.LOW)
-
-		# Set data pins back to output
-		GPIO.setup(self.DB0_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB1_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB2_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB3_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB4_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB5_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB6_PIN, GPIO.OUT, initial=GPIO.LOW)
-		GPIO.setup(self.DB7_PIN, GPIO.OUT, initial=GPIO.LOW)
-
-		return response
+		RS_PIN_DEVICE.close()
+		RW_PIN_DEVICE.close()
+		E_PIN_DEVICE.close()
+		DB0_PIN_DEVICE.close()
+		DB1_PIN_DEVICE.close()
+		DB2_PIN_DEVICE.close()
+		DB3_PIN_DEVICE.close()
+		DB4_PIN_DEVICE.close()
+		DB5_PIN_DEVICE.close()
+		DB6_PIN_DEVICE.close()
+		DB7_PIN_DEVICE.close()
 	
 	def clear_display(self):
 		self.send_command(self.WriteCommand(
@@ -278,33 +245,95 @@ class CFAH1602ADriver:
 		))
 	
 	def read_data_from_ram(self):
-		pass
-	
+		RS_PIN_DEVICE = DigitalOutputDevice(self.RS_PIN)
+		RW_PIN_DEVICE = DigitalOutputDevice(self.RW_PIN)
+		E_PIN_DEVICE = DigitalOutputDevice(self.E_PIN)
+		DB0_PIN_DEVICE = DigitalInputDevice(self.DB0_PIN)
+		DB1_PIN_DEVICE = DigitalInputDevice(self.DB1_PIN)
+		DB2_PIN_DEVICE = DigitalInputDevice(self.DB2_PIN)
+		DB3_PIN_DEVICE = DigitalInputDevice(self.DB3_PIN)
+		DB4_PIN_DEVICE = DigitalInputDevice(self.DB4_PIN)
+		DB5_PIN_DEVICE = DigitalInputDevice(self.DB5_PIN)
+		DB6_PIN_DEVICE = DigitalInputDevice(self.DB6_PIN)
+		DB7_PIN_DEVICE = DigitalInputDevice(self.DB7_PIN)
+
+		E_PIN_DEVICE.off()
+
+		RS_PIN_DEVICE.value = 1
+		RW_PIN_DEVICE.value = 0
+
+		E_PIN_DEVICE.on()
+
+		sleep(0.002) # Longest execution time is 1.53ms
+
+		response = self.ReadCommandResponse(
+			DB7_PIN_VALUE=DB7_PIN_DEVICE.value,
+			DB6_PIN_VALUE=DB6_PIN_DEVICE.value,
+			DB5_PIN_VALUE=DB5_PIN_DEVICE.value,
+			DB4_PIN_VALUE=DB4_PIN_DEVICE.value,
+			DB3_PIN_VALUE=DB3_PIN_DEVICE.value,
+			DB2_PIN_VALUE=DB2_PIN_DEVICE.value,
+			DB1_PIN_VALUE=DB1_PIN_DEVICE.value,
+			DB0_PIN_VALUE=DB0_PIN_DEVICE.value
+		)
+
+		RS_PIN_DEVICE.close()
+		RW_PIN_DEVICE.close()
+		E_PIN_DEVICE.close()
+		DB0_PIN_DEVICE.close()
+		DB1_PIN_DEVICE.close()
+		DB2_PIN_DEVICE.close()
+		DB3_PIN_DEVICE.close()
+		DB4_PIN_DEVICE.close()
+		DB5_PIN_DEVICE.close()
+		DB6_PIN_DEVICE.close()
+		DB7_PIN_DEVICE.close()
+
+		return response
+
 	def read_busy_flag_and_address(self):
+		RS_PIN_DEVICE = DigitalOutputDevice(self.RS_PIN)
+		RW_PIN_DEVICE = DigitalOutputDevice(self.RW_PIN)
+		E_PIN_DEVICE = DigitalOutputDevice(self.E_PIN)
+		DB0_PIN_DEVICE = DigitalInputDevice(self.DB0_PIN)
+		DB1_PIN_DEVICE = DigitalInputDevice(self.DB1_PIN)
+		DB2_PIN_DEVICE = DigitalInputDevice(self.DB2_PIN)
+		DB3_PIN_DEVICE = DigitalInputDevice(self.DB3_PIN)
+		DB4_PIN_DEVICE = DigitalInputDevice(self.DB4_PIN)
+		DB5_PIN_DEVICE = DigitalInputDevice(self.DB5_PIN)
+		DB6_PIN_DEVICE = DigitalInputDevice(self.DB6_PIN)
+		DB7_PIN_DEVICE = DigitalInputDevice(self.DB7_PIN)
+
+		E_PIN_DEVICE.off()
+
+		RS_PIN_DEVICE.value = 1
+		RW_PIN_DEVICE.value = 1
 		
 		sleep(0.002) # Longest execution time is 1.53ms
 
-		busy_flag = GPIO.input(self.DB7_PIN)
+		busy_flag = DB7_PIN_DEVICE.value
 		address = (
-			(GPIO.input(self.DB6_PIN) << 6) |
-			(GPIO.input(self.DB5_PIN) << 5) |
-			(GPIO.input(self.DB4_PIN) << 4) |
-			(GPIO.input(self.DB3_PIN) << 3) |
-			(GPIO.input(self.DB2_PIN) << 2) |
-			(GPIO.input(self.DB1_PIN) << 1) |
-			GPIO.input(self.DB0_PIN)
+			(DB6_PIN_DEVICE.value << 6) |
+			(DB5_PIN_DEVICE.value << 5) |
+			(DB4_PIN_DEVICE.value << 4) |
+			(DB3_PIN_DEVICE.value << 3) |
+			(DB2_PIN_DEVICE.value << 2) |
+			(DB1_PIN_DEVICE.value << 1) |
+			DB0_PIN_DEVICE.value
 		)
 
-		GPIO.output(self.E_PIN, GPIO.LOW)
+		E_PIN_DEVICE.on()
 
-		# Set data pins back to output
-		GPIO.setup(self.DB0_PIN, GPIO.OUT)
-		GPIO.setup(self.DB1_PIN, GPIO.OUT)
-		GPIO.setup(self.DB2_PIN, GPIO.OUT)
-		GPIO.setup(self.DB3_PIN, GPIO.OUT)
-		GPIO.setup(self.DB4_PIN, GPIO.OUT)
-		GPIO.setup(self.DB5_PIN, GPIO.OUT)
-		GPIO.setup(self.DB6_PIN, GPIO.OUT)
-		GPIO.setup(self.DB7_PIN, GPIO.OUT)
+		RS_PIN_DEVICE.close()
+		RW_PIN_DEVICE.close()
+		E_PIN_DEVICE.close()
+		DB0_PIN_DEVICE.close()
+		DB1_PIN_DEVICE.close()
+		DB2_PIN_DEVICE.close()
+		DB3_PIN_DEVICE.close()
+		DB4_PIN_DEVICE.close()
+		DB5_PIN_DEVICE.close()
+		DB6_PIN_DEVICE.close()
+		DB7_PIN_DEVICE.close()
 
 		return busy_flag, address

@@ -1,7 +1,5 @@
 # --- CONFIGURATION ---
 # Edit these values to match your hardware setup
-import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.BCM)
 
 RS_PIN = 26
 RW_PIN = 27

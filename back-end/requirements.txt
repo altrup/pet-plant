@@ -1,2 +1,2 @@
 fastapi
-RPi.GPIO
+gpiozero
