@@ -17,5 +17,16 @@ class CFAH1602A:
 		self.driver.function_set(data_length_8bit=True, two_line=True, font_5x11=False)
 		# Now we can start actually setting data
 		self.driver.function_set(data_length_8bit=True, two_line=True, font_5x11=False)
-		self.driver.display_on_off_control(display_on=False, cursor_on=False, blink_on=False)
+		self.driver.display_on_off_control(display_on=True, cursor_on=True, blink_on=True)
 		self.driver.clear_display()
+	
+	def display_string(self, string: str, line: int):
+		if line == 1:
+			self.driver.set_ddram_address(0x00)
+		elif line == 2:
+			self.driver.set_ddram_address(0x40)
+		else:
+			raise ValueError("Line must be 1 or 2")
+		
+		for char in string:
+			self.driver.write_data_to_ram(ord(char))
